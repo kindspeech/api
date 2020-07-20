@@ -21,9 +21,10 @@ compileTestKotlin {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "io.ktor:ktor-server-core:$KTOR_VERSION"
     implementation "io.ktor:ktor-server-netty:$KTOR_VERSION"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.json:json:20200518"
 }
 
 application {
