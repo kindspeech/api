@@ -1,0 +1,40 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'application'
+}
+
+group 'org.kindspeech'
+version '1.0-SNAPSHOT'
+
+def KTOR_VERSION = '1.3.2'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "io.ktor:ktor-server-core:$KTOR_VERSION"
+    implementation "io.ktor:ktor-server-netty:$KTOR_VERSION"
+}
+
+application {
+    applicationName = "api"
+    mainClass.set("org.kindspeech.api.MainKt")
+}
+
+task gcloudBuild(type: Exec) {
+    commandLine "gcloud", "builds", "submit", "--tag", "gcr.io/kind-speech/api"
+}
+
+task gcloudDeploy(type: Exec) {
+    commandLine "gcloud", "run", "deploy", "api", "--image", "gcr.io/kind-speech/api"
+}
