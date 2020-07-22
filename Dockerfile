@@ -14,7 +14,8 @@ RUN ./gradlew installDist --no-daemon
 # Use the Official OpenJDK image for a lean production stage of our multi-stage build.
 # https://hub.docker.com/_/openjdk
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM openjdk:8-jre-alpine
+# Note openjdk:8-jre-alpine doesn't work with the GCP Secret Manager dependency.
+FROM openjdk:8
 
 # Copy the jar to the production image from the builder stage.
 WORKDIR /app

@@ -7,6 +7,7 @@ group 'org.kindspeech'
 version '1.0-SNAPSHOT'
 
 def KTOR_VERSION = '1.3.2'
+def EXPOSED_VERSION = "0.26.1"
 
 repositories {
     mavenCentral()
@@ -21,8 +22,14 @@ compileTestKotlin {
 }
 
 dependencies {
+    implementation "com.google.cloud:google-cloud-secretmanager:1.1.0"
+    implementation "com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.0.16"
+    implementation "com.zaxxer:HikariCP:3.4.5"
     implementation "io.ktor:ktor-server-core:$KTOR_VERSION"
     implementation "io.ktor:ktor-server-netty:$KTOR_VERSION"
+    implementation "mysql:mysql-connector-java:8.0.21"
+    implementation "org.jetbrains.exposed:exposed-core:$EXPOSED_VERSION"
+    implementation "org.jetbrains.exposed:exposed-jdbc:$EXPOSED_VERSION"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.json:json:20200518"
 }
