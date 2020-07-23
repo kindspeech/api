@@ -22,6 +22,7 @@ compileTestKotlin {
 }
 
 dependencies {
+    implementation "ch.qos.logback:logback-classic:1.2.3"
     implementation "com.google.cloud:google-cloud-secretmanager:1.1.0"
     implementation "com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.0.16"
     implementation "com.zaxxer:HikariCP:3.4.5"
