@@ -2,6 +2,7 @@ package org.kindspeech.api
 
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CORS
 import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -24,6 +25,11 @@ fun main() {
             exception<Throwable> {
                 call.respond(HttpStatusCode.InternalServerError)
             }
+        }
+
+        install(CORS) {
+            allowNonSimpleContentTypes = true
+            anyHost()
         }
 
         routing {
