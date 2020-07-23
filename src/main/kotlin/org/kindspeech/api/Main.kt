@@ -1,5 +1,6 @@
 package org.kindspeech.api
 
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CORS
@@ -20,10 +21,29 @@ fun main() {
 
     val db by lazy { Database() }
 
+    suspend fun ApplicationCall.respondJson(json: JSONObject) {
+        respondText(ContentType.Application.Json) {
+            json.toString()
+        }
+    }
+
+    suspend fun ApplicationCall.respondError(statusCode: HttpStatusCode) {
+        val response = JSONObject().apply {
+            put("status", statusCode.value)
+            put("error", statusCode.description)
+        }
+        respondJson(response)
+    }
+
     embeddedServer(Netty, port) {
         install(StatusPages) {
-            exception<Throwable> {
-                call.respond(HttpStatusCode.InternalServerError)
+            exception<Throwable> { cause ->
+                call.respondError(HttpStatusCode.InternalServerError)
+                throw cause // Throwing here logs the error.
+            }
+
+            status(HttpStatusCode.NotFound) { statusCode ->
+                call.respondError(statusCode)
             }
         }
 
@@ -42,9 +62,7 @@ fun main() {
                             put("attribution", text.attribution)
                         }
                     }
-                    call.respondText(ContentType.Application.Json) {
-                        response.toString()
-                    }
+                    call.respondJson(response)
                 }
             }
         }
