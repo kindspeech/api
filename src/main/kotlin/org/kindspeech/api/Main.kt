@@ -12,7 +12,7 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.json.JSONArray
+import org.json.JSONObject
 
 fun main() {
     val port = System.getenv("PORT")?.toInt() ?: 8080
@@ -29,11 +29,11 @@ fun main() {
         routing {
             route("v1") {
                 get("text") {
-                    val limit = call.request.queryParameters["limit"]?.toInt() ?: 1
-                    val text = db.randomText(limit)
-                    val response = JSONArray().apply {
-                        text.forEach { message ->
-                            put(message)
+                    val text = db.randomText()
+                    val response = JSONObject().apply {
+                        put("text", text.text)
+                        if (text.attribution != null) {
+                            put("attribution", text.attribution)
                         }
                     }
                     call.respondText(ContentType.Application.Json) {

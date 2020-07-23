@@ -9,12 +9,15 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import javax.sql.DataSource
 
-private object Text : Table() {
+private object TableText : Table("Text") {
     val id = integer("id")
     val text = varchar("text", 255)
+    val attribution = varchar("attribution", 255).nullable()
 
     override val primaryKey = PrimaryKey(id)
 }
+
+data class Text(val text: String, val attribution: String?)
 
 class Database {
 
@@ -22,16 +25,20 @@ class Database {
         initDatabase()
     }
 
-    fun randomText(limit: Int): List<String> {
+    fun randomText(): Text {
         return transaction {
-            Text
+            // TODO Optimize for selecting a single random row.
+            TableText
                 // It's significantly faster to ORDER BY RAND() on an indexed column.
-                .joinQuery(on = { it[Text.id] eq Text.id }) {
-                    Text.slice(Text.id).selectAll().orderBy(Random()).limit(limit)
+                .joinQuery(on = { it[TableText.id] eq TableText.id }) {
+                    TableText.slice(TableText.id).selectAll().orderBy(Random()).limit(1)
                 }
-                .slice(Text.text)
+                .slice(TableText.text, TableText.attribution)
                 .selectAll()
-                .map { it[Text.text] }
+                .single()
+                .let {
+                    Text(it[TableText.text], it[TableText.attribution])
+                }
         }
     }
 
