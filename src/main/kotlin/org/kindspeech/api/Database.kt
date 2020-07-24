@@ -40,16 +40,20 @@ class Database {
             TableText
                 // It's significantly faster to ORDER BY RAND() on an indexed column.
                 .joinQuery(on = { it[TableText.id] eq TableText.id }) {
-                    TableText.slice(TableText.id).selectAll().orderBy(Random()).limit(1)
+                    TableText
+                        .slice(TableText.id)
+                        .run {
+                            if (maxLength != null) {
+                                select { LengthFunction(TableText.text) lessEq maxLength }
+                            } else {
+                                selectAll()
+                            }
+                        }
+                        .orderBy(Random())
+                        .limit(1)
                 }
                 .slice(TableText.text, TableText.attribution)
-                .run {
-                    if (maxLength != null) {
-                        select { LengthFunction(TableText.text) lessEq maxLength }
-                    } else {
-                        selectAll()
-                    }
-                }
+                .selectAll()
                 .single()
                 .let {
                     Text(it[TableText.text], it[TableText.attribution])
