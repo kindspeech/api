@@ -66,6 +66,9 @@ fun main() {
                     val text = db.randomText(maxLength = 30)
                     val response = JSONObject().apply {
                         put("schemaVersion", 1)
+                        // Label is required but can be set to the empty string to avoid displaying anything on the left
+                        // side of the badge.
+                        put("label", "")
                         put("message", text.text)
                         put("color", "e13028")
                     }
