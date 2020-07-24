@@ -17,6 +17,10 @@ import org.kindspeech.api.ext.respondJson
 import org.slf4j.event.Level
 
 fun main() {
+    // Fixes "SSL peer shut down incorrectly" error.
+    // https://stackoverflow.com/questions/28908835/ssl-peer-shut-down-incorrectly-in-java
+    System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2")
+
     val port = System.getenv("PORT")?.toInt() ?: 8080
 
     val db by lazy { Database() }
