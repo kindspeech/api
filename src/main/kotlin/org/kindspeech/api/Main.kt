@@ -46,6 +46,8 @@ fun main() {
             anyHost()
         }
 
+        val svgBadgeLogo by lazy { SVG("/images/badge_logo.svg") }
+
         routing {
             route("v1") {
                 get("text") {
@@ -69,8 +71,12 @@ fun main() {
                         // Label is required but can be set to the empty string to avoid displaying anything on the left
                         // side of the badge.
                         put("label", "")
+                        // TODO Add parameter to omit the logo, possibly change the style at the same time.
+                        put("logoSvg", svgBadgeLogo.compactString)
+                        // Trial and error showed that 28 is the minimum width for the logo to be as tall as possible.
+                        put("logoWidth", 28)
                         put("message", text.text)
-                        put("color", "e13028")
+                        put("style", "social")
                     }
                     call.respondJson(response)
                 }
