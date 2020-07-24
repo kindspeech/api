@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Function
 import org.jetbrains.exposed.sql.transactions.transaction
 import javax.sql.DataSource
 
@@ -25,7 +26,7 @@ class Database {
         initDatabase()
     }
 
-    fun randomText(): Text {
+    fun randomText(maxLength: Int? = null): Text {
         return transaction {
             // TODO Optimize for selecting a single random row.
             TableText
@@ -34,7 +35,13 @@ class Database {
                     TableText.slice(TableText.id).selectAll().orderBy(Random()).limit(1)
                 }
                 .slice(TableText.text, TableText.attribution)
-                .selectAll()
+                .run {
+                    if (maxLength != null) {
+                        select { LengthFunction(TableText.text) lessEq maxLength }
+                    } else {
+                        selectAll()
+                    }
+                }
                 .single()
                 .let {
                     Text(it[TableText.text], it[TableText.attribution])
@@ -78,5 +85,11 @@ class Database {
             val response = client.accessSecretVersion(secretVersionName)
             return response.payload.data.toStringUtf8()
         }
+    }
+}
+
+class LengthFunction<T: ExpressionWithColumnType<String>>(private val exp: T) : Function<Int>(IntegerColumnType()) {
+    override fun toQueryBuilder(queryBuilder: QueryBuilder) = queryBuilder {
+        append("CHAR_LENGTH(", exp, ')')
     }
 }

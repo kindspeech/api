@@ -54,6 +54,19 @@ fun main() {
                     }
                     call.respondJson(response)
                 }
+
+                // Meant to be used with: https://shields.io/endpoint
+                get("badge") {
+                    // The maximum length of the text is limited to avoid generating huge badges. However the shields.io
+                    // API has no documented limit.
+                    val text = db.randomText(maxLength = 30)
+                    val response = JSONObject().apply {
+                        put("schemaVersion", 1)
+                        put("message", text.text)
+                        put("color", "e13028")
+                    }
+                    call.respondJson(response)
+                }
             }
         }
     }.start(wait = true)
