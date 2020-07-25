@@ -6,14 +6,16 @@ import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
+import io.ktor.response.respondRedirect
 import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.json.JSONObject
-import org.kindspeech.api.ext.respondJsonError
 import org.kindspeech.api.ext.respondJson
+import org.kindspeech.api.ext.respondJsonError
+import org.kindspeech.api.ext.urlEncode
 import org.slf4j.event.Level
 
 fun main() {
@@ -66,19 +68,14 @@ fun main() {
                     // The maximum length of the text is limited to avoid generating huge badges. However the shields.io
                     // API has no documented limit.
                     val text = db.randomText(maxLength = 30)
-                    val response = JSONObject().apply {
-                        put("schemaVersion", 1)
-                        // Label is required but can be set to the empty string to avoid displaying anything on the left
-                        // side of the badge.
-                        put("label", "")
-                        // TODO Add parameter to omit the logo, possibly change the style at the same time.
-                        put("logoSvg", svgBadgeLogo.compactString)
-                        // Trial and error showed that 28 is the minimum width for the logo to be as tall as possible.
-                        put("logoWidth", 28)
-                        put("message", text.text)
-                        put("style", "social")
-                    }
-                    call.respondJson(response)
+                    val shieldsUrl = "http://img.shields.io/static/v1" +
+                            "?label=" +
+                            "&message=${text.text.urlEncode()}" +
+                            "&style=social" +
+                            "&logoWidth=28" +
+                            "&logo=${svgBadgeLogo.dataUri}"
+
+                    call.respondRedirect(shieldsUrl, permanent = false)
                 }
             }
         }
