@@ -1,6 +1,5 @@
-package org.kindspeech.api
+package org.kindspeech.api.badge
 
-import java.io.File
 import java.net.URL
 
 class Resource(path: String) {

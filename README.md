@@ -1,1 +1,1 @@
-[![Kind Speech Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.kindspeech.org%2Fv1%2Fbadge)](https://kindspeech.org)
+[![Kind Speech Badge](https://api.kindspeech.org/v1/badge)](https://kindspeech.org)

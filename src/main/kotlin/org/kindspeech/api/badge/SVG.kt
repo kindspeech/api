@@ -1,6 +1,5 @@
-package org.kindspeech.api
+package org.kindspeech.api.badge
 
-import io.ktor.util.encodeBase64
 import java.util.Base64
 
 class SVG(resourcePath: String) {

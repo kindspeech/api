@@ -13,9 +13,11 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.json.JSONObject
+import org.kindspeech.api.badge.badgeInterceptor
 import org.kindspeech.api.ext.respondJson
 import org.kindspeech.api.ext.respondJsonError
 import org.kindspeech.api.ext.urlEncode
+import org.kindspeech.api.text.textInterceptor
 import org.slf4j.event.Level
 
 fun main() {
@@ -25,7 +27,7 @@ fun main() {
 
     val port = System.getenv("PORT")?.toInt() ?: 8080
 
-    val db by lazy { Database() }
+    val db = lazy { Database() }
 
     embeddedServer(Netty, port) {
         install(CallLogging) {
@@ -48,36 +50,12 @@ fun main() {
             anyHost()
         }
 
-        val svgBadgeLogo by lazy { SVG("/images/badge_logo.svg") }
-
         routing {
             route("v1") {
-                get("text") {
-                    val text = db.randomText()
-                    val response = JSONObject().apply {
-                        put("text", text.text)
-                        if (text.attribution != null) {
-                            put("attribution", text.attribution)
-                        }
-                    }
-                    call.respondJson(response)
-                }
-
-                // Meant to be used with: https://shields.io/endpoint
-                get("badge") {
-                    // The maximum length of the text is limited to avoid generating huge badges. However the shields.io
-                    // API has no documented limit.
-                    val text = db.randomText(maxLength = 30)
-                    val shieldsUrl = "http://img.shields.io/static/v1" +
-                            "?label=" +
-                            "&message=${text.text.urlEncode()}" +
-                            "&style=social" +
-                            "&logoWidth=28" +
-                            "&logo=${svgBadgeLogo.dataUri}"
-
-                    call.respondRedirect(shieldsUrl, permanent = false)
-                }
+                get("text", textInterceptor(db))
+                get("badge", badgeInterceptor(db))
             }
         }
+
     }.start(wait = true)
 }
