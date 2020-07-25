@@ -14,7 +14,7 @@ fun badgeInterceptor(db: Lazy<Database>): PipelineInterceptor<Unit, ApplicationC
     // API has no documented limit.
     val text = db.value.randomText(maxLength = 30)
 
-    val shieldsUrl = "http://img.shields.io/static/v1" +
+    val shieldsUrl = "https://img.shields.io/static/v1" +
             "?label=" +
             "&message=${text.text.urlEncode()}" +
             "&style=social" +
