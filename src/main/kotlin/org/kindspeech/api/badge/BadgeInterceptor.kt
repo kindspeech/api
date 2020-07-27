@@ -2,6 +2,8 @@ package org.kindspeech.api.badge
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.http.CacheControl
+import io.ktor.response.cacheControl
 import io.ktor.response.respondRedirect
 import io.ktor.util.pipeline.PipelineInterceptor
 import org.kindspeech.api.Database
@@ -20,6 +22,8 @@ fun badgeInterceptor(db: Lazy<Database>): PipelineInterceptor<Unit, ApplicationC
             "&style=social" +
             "&logoWidth=28" +
             "&logo=${svgBadgeLogo.dataUri}"
+
+    call.response.cacheControl(CacheControl.MaxAge(maxAgeSeconds = 300))
 
     call.respondRedirect(shieldsUrl, permanent = false)
 }

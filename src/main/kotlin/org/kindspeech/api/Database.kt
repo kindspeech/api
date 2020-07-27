@@ -44,7 +44,7 @@ class Database {
                         .slice(TableText.id)
                         .run {
                             if (maxLength != null) {
-                                select { LengthFunction(TableText.text) lessEq maxLength }
+                                select { CharLengthFunction(TableText.text) lessEq maxLength }
                             } else {
                                 selectAll()
                             }
@@ -100,7 +100,7 @@ class Database {
     }
 }
 
-class LengthFunction<T: ExpressionWithColumnType<String>>(private val exp: T) : Function<Int>(IntegerColumnType()) {
+class CharLengthFunction<T: ExpressionWithColumnType<String>>(private val exp: T) : Function<Int>(IntegerColumnType()) {
     override fun toQueryBuilder(queryBuilder: QueryBuilder) = queryBuilder {
         append("CHAR_LENGTH(", exp, ')')
     }
