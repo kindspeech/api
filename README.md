@@ -1,7 +1,7 @@
 Give out some love, add a kind badge to your GitHub repositories today!
 
 ```
-![](https://api.kindspeech.org/v1/badge)]
+![](https://api.kindspeech.org/v1/badge)
 ```
 
 [![Kind Speech Badge](https://api.kindspeech.org/v1/badge)](https://kindspeech.org)
