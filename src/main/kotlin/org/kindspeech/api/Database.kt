@@ -77,6 +77,9 @@ class Database {
             config.username = DB_USER
             config.password = getPassword()
 
+            config.minimumIdle = 1
+            config.maximumPoolSize = 5
+
             config.addDataSourceProperty("socketFactory", "com.google.cloud.sql.mysql.SocketFactory")
             config.addDataSourceProperty("cloudSqlInstance", CLOUD_SQL_CONNECTION_NAME)
 
