@@ -1,7 +1,6 @@
 package org.kindspeech.api.badge
 
 import org.kindspeech.api.svg.SVG
-import org.kindspeech.api.svg.SVGDominantBaselineAttribute.DominantBaseline
 import org.kindspeech.api.svg.SVGRect
 import org.kindspeech.api.svg.SVGText
 import org.kindspeech.api.svg.SVGText.LengthAdjust
@@ -71,7 +70,6 @@ class FlatBadge(text: String, color: String) {
 
                 val sharedTextAttributes: SVGText.() -> Unit = {
                     x = HORIZONTAL_SPACING_PX
-                    `dominant-baseline` = DominantBaseline.middle
                     lengthAdjust = LengthAdjust.spacingAndGlyphs
                     textLength = textWidthEstimate
                     value = text
@@ -80,7 +78,7 @@ class FlatBadge(text: String, color: String) {
                 // Text shadow.
                 text {
                     sharedTextAttributes()
-                    y = (HEIGHT / 2) + 1
+                    y = 15 // 1px below the text
                     `aria-hidden` = true
                     fill = "#010101"
                     `fill-opacity` = .3f
@@ -89,7 +87,7 @@ class FlatBadge(text: String, color: String) {
                 // Text.
                 text {
                     sharedTextAttributes()
-                    y = HEIGHT / 2
+                    y = 14
                     fill = "#fff"
                 }
             }
