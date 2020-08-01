@@ -10,6 +10,7 @@ import org.kindspeech.api.svg.SVGTextRenderingAttribute.TextRendering
 import org.kindspeech.api.svg.svg
 import java.awt.Font
 import java.awt.font.FontRenderContext
+import kotlin.math.roundToInt
 
 class FlatBadge(text: String, color: String) {
 
@@ -101,8 +102,8 @@ class FlatBadge(text: String, color: String) {
         private val FONT = Font(Font.SANS_SERIF, Font.PLAIN, 11)
         private val FONT_RENDER_CONTEXT = FontRenderContext(null, false, true)
 
-        private fun String.size11WidthEstimate(): Double {
-            return FONT.getStringBounds(this, FONT_RENDER_CONTEXT).width
+        private fun String.size11WidthEstimate(): Int {
+            return FONT.getStringBounds(this, FONT_RENDER_CONTEXT).width.roundToInt()
         }
     }
 }
