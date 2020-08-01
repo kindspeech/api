@@ -1,8 +1,8 @@
-package org.kindspeech.api.badge
+package org.kindspeech.api.svg
 
 import java.util.Base64
 
-class SVG(resourcePath: String) {
+class SVGResource(resourcePath: String) {
 
     val string by lazy { Resource(resourcePath).url.readText() }
 

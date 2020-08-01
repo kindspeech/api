@@ -1,4 +1,4 @@
-package org.kindspeech.api.badge
+package org.kindspeech.api.svg
 
 import java.net.URL
 
