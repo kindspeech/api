@@ -1,21 +1,22 @@
 package org.kindspeech.api.badge
 
 import org.kindspeech.api.svg.SVG
-import org.kindspeech.api.svg.SVGDominantBaselineAttribute
+import org.kindspeech.api.svg.SVGDominantBaselineAttribute.DominantBaseline
 import org.kindspeech.api.svg.SVGRect
 import org.kindspeech.api.svg.SVGText
-import org.kindspeech.api.svg.SVGTextAnchorAttribute
-import org.kindspeech.api.svg.SVGTextRenderingAttribute
+import org.kindspeech.api.svg.SVGText.LengthAdjust
+import org.kindspeech.api.svg.SVGTextAnchorAttribute.TextAnchor
+import org.kindspeech.api.svg.SVGTextRenderingAttribute.TextRendering
 import org.kindspeech.api.svg.svg
 import java.awt.Font
-import java.awt.Toolkit
+import java.awt.font.FontRenderContext
 
 class FlatBadge(private val text: String) {
 
     val svg: SVG
 
     init {
-        val textWidthEstimate = FONT_METRICS.stringWidth(text)
+        val textWidthEstimate = text.size11WidthEstimate()
 
         svg = svg {
             width = HORIZONTAL_SPACING_PX + textWidthEstimate + HORIZONTAL_SPACING_PX
@@ -62,15 +63,15 @@ class FlatBadge(private val text: String) {
 
             // Text group.
             g {
-                `dominant-baseline` = SVGDominantBaselineAttribute.DominantBaseline.middle
+                `dominant-baseline` = DominantBaseline.middle
                 `font-family` = "Verdana,Geneva,DejaVu Sans,sans-serif"
                 `font-size` = "11px"
-                `text-anchor` = SVGTextAnchorAttribute.TextAnchor.start
-                `text-rendering` = SVGTextRenderingAttribute.TextRendering.optimizeLegibility
+                `text-anchor` = TextAnchor.start
+                `text-rendering` = TextRendering.optimizeLegibility
 
                 val sharedTextAttributes: SVGText.() -> Unit = {
                     x = HORIZONTAL_SPACING_PX
-                    lengthAdjust = SVGText.LengthAdjust.spacingAndGlyphs
+                    lengthAdjust = LengthAdjust.spacingAndGlyphs
                     textLength = textWidthEstimate
                     value = text
                 }
@@ -98,7 +99,10 @@ class FlatBadge(private val text: String) {
         private const val HEIGHT = 20
         private const val HORIZONTAL_SPACING_PX = 6
         private val FONT = Font(Font.SANS_SERIF, Font.PLAIN, 11)
-        @Suppress("DEPRECATION")
-        private val FONT_METRICS = Toolkit.getDefaultToolkit().getFontMetrics(FONT)
+        private val FONT_RENDER_CONTEXT = FontRenderContext(null, false, true)
+
+        private fun String.size11WidthEstimate(): Double {
+            return FONT.getStringBounds(this, FONT_RENDER_CONTEXT).width
+        }
     }
 }
