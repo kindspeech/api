@@ -25,6 +25,8 @@ fun main() {
     // https://stackoverflow.com/questions/28908835/ssl-peer-shut-down-incorrectly-in-java
     System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2")
 
+    val apiDocumentationUrl = requireEnv("KS_API_DOCUMENTATION_URL")
+
     val port = System.getenv("PORT")?.toInt() ?: 8080
 
     val db = lazy { Database() }
@@ -51,9 +53,12 @@ fun main() {
         }
 
         routing {
-            route("v1") {
-                get("text", textInterceptor(db))
-                get("badge", badgeInterceptor(db))
+            get("/") {
+                call.respondRedirect(apiDocumentationUrl, permanent = false)
+            }
+            route("/v1") {
+                get("/text", textInterceptor(db))
+                get("/badge", badgeInterceptor(db))
             }
         }
 

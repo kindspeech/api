@@ -70,12 +70,6 @@ class Database {
         private val DB_PASSWORD_SECRET_VERSION = requireEnv("KS_DB_PASSWORD_SECRET_VERSION")
         private val DB_NAME = requireEnv("KS_DB_NAME")
 
-        private fun requireEnv(name: String): String {
-            return checkNotNull(System.getenv(name)) {
-                "Environment variable $name must be set"
-            }
-        }
-
         private fun initDatabase() {
             val config = HikariConfig()
 
