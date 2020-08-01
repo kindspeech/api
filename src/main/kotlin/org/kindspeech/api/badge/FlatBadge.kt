@@ -11,7 +11,7 @@ import org.kindspeech.api.svg.svg
 import java.awt.Font
 import java.awt.font.FontRenderContext
 
-class FlatBadge(private val text: String) {
+class FlatBadge(text: String, color: String) {
 
     val svg: SVG
 
@@ -52,7 +52,7 @@ class FlatBadge(private val text: String) {
             // Main background.
             rect {
                 sharedRectAttributes()
-                fill = "#0f59c6"
+                fill = color
             }
 
             // Gradient overlay.
