@@ -25,7 +25,11 @@ open class SVG : SVGElement("svg"), SVGContainer, SVGDefsContainer, SVGGContaine
 
 class SVGDefs : SVGElement("defs"), SVGLinearGradientContainer
 
-class SVGG : SVGElement("g"), SVGTextContainer, SVGFillableAttributes, SVGTextAttributes
+/**
+ * Does not support the "dominant-baseline" attribute on Safari.
+ */
+class SVGG : SVGElement("g"), SVGTextContainer, SVGFillableAttributes, SVGFontFamilyAttribute,
+    SVGFontSizeAttribute, SVGTextAnchorAttribute, SVGTextRenderingAttribute
 
 class SVGImage : SVGElement("image"), SVGPositionableAttributes {
     var href: String by attributes
@@ -50,8 +54,9 @@ class SVGStop : SVGElement("stop") {
     var `stop-opacity`: Number by attributes
 }
 
-class SVGText : SVGElement("text"), SVGPositionableAttributes, SVGFillableAttributes, SVGTextAttributes,
-    SVGValueAttribute {
+class SVGText : SVGElement("text"), SVGPositionableAttributes, SVGFillableAttributes,
+    SVGDominantBaselineAttribute, SVGFontFamilyAttribute, SVGFontSizeAttribute, SVGTextAnchorAttribute,
+    SVGTextRenderingAttribute, SVGValueAttribute {
 
     enum class LengthAdjust {
         spacing, spacingAndGlyphs
@@ -135,9 +140,6 @@ interface SVGFillableAttributes : SVGFillAttribute, SVGFillOpacityAttribute
 interface SVGPositionableAttributes : SVGSizeableAttributes, SVGXAttribute, SVGYAttribute
 
 interface SVGSizeableAttributes : SVGWidthAttribute, SVGHeightAttribute
-
-interface SVGTextAttributes : SVGDominantBaselineAttribute, SVGFontFamilyAttribute, SVGFontSizeAttribute,
-    SVGTextAnchorAttribute, SVGTextRenderingAttribute
 
 interface SVGIdAttribute : XMLWrapper {
     var id: String

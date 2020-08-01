@@ -63,7 +63,6 @@ class FlatBadge(text: String, color: String) {
 
             // Text group.
             g {
-                `dominant-baseline` = DominantBaseline.middle
                 `font-family` = "Verdana,Geneva,DejaVu Sans,sans-serif"
                 `font-size` = "11px"
                 `text-anchor` = TextAnchor.start
@@ -71,6 +70,7 @@ class FlatBadge(text: String, color: String) {
 
                 val sharedTextAttributes: SVGText.() -> Unit = {
                     x = HORIZONTAL_SPACING_PX
+                    `dominant-baseline` = DominantBaseline.middle
                     lengthAdjust = LengthAdjust.spacingAndGlyphs
                     textLength = textWidthEstimate
                     value = text
